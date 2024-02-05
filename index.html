@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Neataptic test</title>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="dist/output.css" />
+
+    <!-- Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.js"></script>
+    <script src="https://wagenaartje.github.io/neataptic/cdn/1.4.7/neataptic.js"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+
+    <script src="main.js" type="module"></script>
+  </head>
+
+  <body class="flex justify-center p-12">
+    <div class="w-full max-w-sm">
+      <button
+        x-data
+        class="w-100 flex items-center"
+        @click="localStorage.clear()"
+      >
+        Clear localStorage
+      </button>
+    </div>
+  </body>
+</html>

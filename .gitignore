@@ -1,0 +1,5 @@
+**.ipynb
+**.py
+data/
+dist/
+node_modules/
