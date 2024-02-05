@@ -1,49 +1,56 @@
-console.log('Hello world');
+import { SVBGame } from './volleyball.js';
 
-let examples = localStorage.getItem('mnist-examples');
-if (!examples) {
-  const trainData = await (await fetch('mnist_1k.json')).text();
-  console.log('Loaded training data.');
-  examples = JSON.parse(trainData).map((x) => ({
-    input: x.image,
-    output: x.label,
-  }));
-  localStorage.setItem('mnist-examples', JSON.stringify(examples));
+let width = 750,
+  height = 300;
+let groundHeight = 75;
 
-  console.log('Saved examples to localStorage.');
-} else {
-  console.log('Fetched examples from localStorage.');
-  examples = JSON.parse(examples);
-}
+let gameConfig = {
+  width: 750,
+  height: 300,
+  groundHeight: 75,
+  netHeight: 40,
+  slimeRad: 75 / 2,
+  ballRad: 13,
+  slimeSpeed: 300,
+  slimeJumpPower: 600,
+  gravity: 30,
+};
 
-examples = examples.map((x) => {
-  let output = new Array(10).fill(0);
-  output[x.output - 1] = 1;
-  return {
-    input: x.input,
-    output,
+new p5((p) => {
+  let game;
+
+  p.setup = () => {
+    p.createCanvas(width, height + groundHeight);
+    p.frameRate(60);
+
+    game = new SVBGame(gameConfig);
   };
-});
-window.examples = examples;
 
-console.log(`${examples.length} examples.`);
-console.log(examples[0].input.length, examples[0].output.length);
+  p.draw = () => {
+    game.update(1 / 60);
+    if (p.isKeyPressed) {
+      if (p.keyIsDown(p.UP_ARROW)) {
+        game.control(0, null, 1);
+      }
+      let isLeft = p.keyIsDown(p.LEFT_ARROW);
+      let isRight = p.keyIsDown(p.RIGHT_ARROW);
+      if (isLeft ^ isRight) {
+        if (isLeft) game.control(0, -1, null);
+        if (isRight) game.control(0, 1, null);
+      } else {
+        game.control(0, 0, null);
+      }
+    } else {
+      game.control(0, 0, 0);
+    }
 
-const network = new neataptic.Network(examples[0].input.length, 10);
-window.network = network;
-console.log(`Initialized network, evolving...`, network);
+    p.background('#d4e8f1');
+    p.noStroke();
+    p.fill('#ccaa66');
+    p.rect(0, height, width, groundHeight);
 
-/*
-some logs: popsize=50, iterations=50, mutationRate=50, 0.09
-*/
-await network.evolve(examples, {
-  mutation: neataptic.methods.mutation.FFW,
-  equal: true,
-  popsize: 50,
-  elitism: 10,
-  log: 1,
-  error: 0.03,
-  iterations: 50,
-  mutationRate: 0.5,
-});
-console.log('Done evolving.');
+    game.display(p);
+  };
+
+  p5.keyPressed = () => {};
+}, 'sketch-container');

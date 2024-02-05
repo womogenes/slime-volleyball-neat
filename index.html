@@ -19,15 +19,18 @@
     <script src="main.js" type="module"></script>
   </head>
 
-  <body class="flex justify-center p-12">
-    <div class="w-full max-w-sm">
-      <button
-        x-data
-        class="w-100 flex items-center"
-        @click="localStorage.clear()"
-      >
-        Clear localStorage
-      </button>
-    </div>
+  <body class="p-12">
+    <main class="flex flex-col items-center gap-4">
+      <div class="max-w-sm">
+        <button
+          x-data
+          class="w-100 flex items-center"
+          @click="localStorage.clear()"
+        >
+          Clear localStorage
+        </button>
+      </div>
+      <div class="border" id="sketch-container"></div>
+    </main>
   </body>
 </html>
